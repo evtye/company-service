@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field, field_validator
+from pydantic_core.core_schema import ValidationInfo
 
 
 class CompanyBase(BaseModel):
@@ -7,8 +8,9 @@ class CompanyBase(BaseModel):
     inn: str
 
     @field_validator('inn')
-    def inn_validator(cls, v: str, values):
-        type_ = values['ownership_type']
+    @classmethod
+    def inn_validator(cls, v: str, info: ValidationInfo):
+        type_ = info.data.get('ownership_type')
         if type_ is None:
             raise ValueError("Ownership type must is required")
         if not v.isdigit():
@@ -24,7 +26,7 @@ class CompanyCreate(CompanyBase):
 
 
 class Company(CompanyBase):
-    id: int
+    company_id: int
 
     class Config:
         orm_mode = True

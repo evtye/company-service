@@ -20,7 +20,7 @@ services:
     image: postgres:14
     container_name: db_company_service
     ports:
-      - "5432:5432"
+      - "5462:5432"
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}

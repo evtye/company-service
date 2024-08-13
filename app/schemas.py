@@ -7,9 +7,18 @@ class CompanyBase(BaseModel):
     ownership_type: int
     inn: str
 
+    @field_validator('name')
+    @classmethod
+    def validate(cls, v: str) -> str:
+        if len(v) < 2:
+            raise ValueError('Name must be at least 2 characters')
+        elif len(v) > 100:
+            raise ValueError('Name must be less than 100 characters')
+
+
     @field_validator('inn')
     @classmethod
-    def inn_validator(cls, v: str, info: ValidationInfo):
+    def inn_validator(cls, v: str, info: ValidationInfo) -> str:
         type_ = info.data.get('ownership_type')
         if type_ is None:
             raise ValueError("Ownership type must is required")

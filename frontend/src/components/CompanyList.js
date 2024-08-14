@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
 const CompanyList = ({ onEdit }) => {
   const [companies, setCompanies] = useState([]);
 
   const fetchCompanies = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/companies/');
+      const response = await axios.get(`${apiUrl}/companies/`);
       setCompanies(response.data);
     } catch (error) {
       console.error("Ошибка при получении списка компаний:", error);
@@ -19,7 +21,7 @@ const CompanyList = ({ onEdit }) => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/companies/${id}`);
+      await axios.delete(`${apiUrl}/companies/${id}`);
       fetchCompanies(); // обновляем список после удаления
     } catch (error) {
       console.error("Ошибка при удалении компании:", error);

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
 const CompanyForm = ({ company, onSuccess }) => {
   const [name, setName] = useState(company ? company.name : '');
   const [type, setType] = useState(company ? company.type : 'UNKNOWN');
@@ -13,9 +15,9 @@ const CompanyForm = ({ company, onSuccess }) => {
 
     try {
       if (company) {
-        await axios.put(`http://localhost:8000/companies/${company.id}`, payload);
+        await axios.put(`${apiUrl}/companies/${company.id}`, payload);
       } else {
-        await axios.post('http://localhost:8000/companies/', payload);
+        await axios.post(`${apiUrl}/companies/`, payload);
       }
       onSuccess();
     } catch (error) {

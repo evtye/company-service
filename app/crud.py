@@ -12,7 +12,7 @@ def get_companies(db: Session, skip: int = 0, limit: int = 10):
 
 
 def create_company(db: Session, company: schemas.CompanyCreate):
-    db_company = models.Company(name=company.name, ownership_type=company.ownership_type, inn=company.inn)
+    db_company = models.Company(**company.dict())
     db.add(db_company)
     db.commit()
     db.refresh(db_company)
@@ -20,8 +20,17 @@ def create_company(db: Session, company: schemas.CompanyCreate):
 
 
 def delete_company(db: Session, company_id: int):
-    pass
+    db_company = db.query(models.Company).filter(models.Company.company_id == company_id).first()
+    if db_company:
+        db.delete(db_company)
+    return db_company
 
 
 def update_company(db: Session, company_id: int, company: schemas.CompanyCreate):
-    pass
+    db_company = db.query(models.Company).filter(models.Company.company_id == company_id).first()
+    if db_company:
+        for key, value in company.dict().items():
+            setattr(db_company, key, value)
+        db.commit()
+        db.refresh(db_company)
+    return db_company

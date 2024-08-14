@@ -20,12 +20,12 @@ def create_company(company: schemas.CompanyCreate, db: Session = Depends(get_db)
     return crud.create_company(db=db, company=company)
 
 
-@app.get('/companies/', response_model=list[schemas.Company])
+@app.get('/companies/', response_model=list[schemas.CompanyRead])
 def read_companies(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return crud.get_companies(db=db, skip=skip, limit=limit)
 
 
-@app.get('/companies/{company_id}')
+@app.get('/companies/{company_id}', response_model=schemas.CompanyRead)
 def read_company(company_id: int, db: Session = Depends(get_db)):
     db_company = crud.get_company(db=db, company_id=company_id)
     if db_company is None:
@@ -41,7 +41,7 @@ def update_company(company_id: int, company: schemas.CompanyCreate, db: Session 
     return db_company
 
 
-@app.delete('companies/{company_id')
+@app.delete('companies/{company_id', response_model=schemas.Company)
 def delete_company(company_id: int, db: Session = Depends(get_db)):
     db_company = crud.delete_company(db=db, company_id=company_id)
     if db_company is None:

@@ -7,14 +7,6 @@ class CompanyBase(BaseModel):
     ownership_type: int
     inn: str
 
-    @field_validator('name')
-    @classmethod
-    def validate(cls, v: str) -> str:
-        if len(v) < 2:
-            raise ValueError('Name must be at least 2 characters')
-        elif len(v) > 100:
-            raise ValueError('Name must be less than 100 characters')
-
 
     @field_validator('inn')
     @classmethod
@@ -32,6 +24,16 @@ class CompanyBase(BaseModel):
 
 class CompanyCreate(CompanyBase):
     pass
+
+
+class CompanyRead(BaseModel):
+    company_id: int | None
+    name: str | None
+    ownership_type: int | None
+    inn: str | None
+
+    class Config:
+        orm_mode = True
 
 
 class Company(CompanyBase):

@@ -1,25 +1,17 @@
-import React, { useState } from 'react';
-import CompanyForm from './components/CompanyForm';
-import CompanyList from './components/CompanyList';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import CompanyList from './pages/CompanyList';
+import CompanyDetail from './pages/CompanyDetail';
 
 function App() {
-  const [editingCompany, setEditingCompany] = useState(null);
-
-  const handleEdit = (company) => {
-    setEditingCompany(company);
-  };
-
-  const handleSuccess = () => {
-    setEditingCompany(null);
-  };
-
-  return (
-    <div className="App">
-      <h1>Управление компаниями</h1>
-      <CompanyForm company={editingCompany} onSuccess={handleSuccess} />
-      <CompanyList onEdit={handleEdit} />
-    </div>
-  );
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<CompanyList />} />
+                <Route path="/companies/:id" element={<CompanyDetail />} />
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;

@@ -1,10 +1,15 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from . import crud, schemas
 from .database import SessionLocal
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"]
+)
 
 
 def get_db():
@@ -41,7 +46,7 @@ def update_company(company_id: int, company: schemas.CompanyCreate, db: Session 
     return db_company
 
 
-@app.delete('companies/{company_id', response_model=schemas.Company)
+@app.delete('/companies/{company_id}', response_model=schemas.Company)
 def delete_company(company_id: int, db: Session = Depends(get_db)):
     db_company = crud.delete_company(db=db, company_id=company_id)
     if db_company is None:

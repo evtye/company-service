@@ -8,7 +8,7 @@ def get_company(db: Session, company_id: int):
 
 
 def get_companies(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(models.Company).offset(skip).limit(limit).all()
+    return db.query(models.Company).order_by(models.Company.company_id.desc()).offset(skip).limit(limit).all()
 
 
 def create_company(db: Session, company: schemas.CompanyCreate):
@@ -23,6 +23,7 @@ def delete_company(db: Session, company_id: int):
     db_company = db.query(models.Company).filter(models.Company.company_id == company_id).first()
     if db_company:
         db.delete(db_company)
+        db.commit()
     return db_company
 
 

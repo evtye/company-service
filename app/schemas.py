@@ -3,7 +3,7 @@ from pydantic_core.core_schema import ValidationInfo
 
 
 class CompanyBase(BaseModel):
-    name: str = Field(..., min_length=2, max_length=99)
+    name: str = Field(..., min_length=2, max_length=101)
     ownership_type: int
     inn: str
 
@@ -15,14 +15,19 @@ class CompanyBase(BaseModel):
             raise ValueError("Ownership type must required")
         if not v.isdigit():
             raise ValueError("inn must contain only digits")
-        # expected_lengths = {0: {10, 12}, 1: {12}, 2: {10}}
-        # if len(v) not in expected_lengths.get(type_, {}):
-        #     raise ValueError(f"Incorrect inn length for ownership type {type_}")
+        expected_lengths = {0: {10, 12}, 1: {12}, 2: {10}}
+        if len(v) not in expected_lengths.get(type_, {}):
+            raise ValueError(f"Incorrect inn length for ownership type {type_}")
         return v
 
 
 class CompanyCreate(CompanyBase):
-    pass
+    @field_validator('name')
+    @classmethod
+    def name_validator(cls, v: str) -> str:
+        if len(v.strip()) < 2:
+            raise ValueError("Name must have at least 2 characters excluding spaces")
+        return v
 
 
 class CompanyRead(BaseModel):

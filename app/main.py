@@ -46,7 +46,7 @@ def update_company(company_id: int, company: schemas.CompanyCreate, db: Session 
     return db_company
 
 
-@app.delete('/companies/{company_id}', response_model=schemas.Company)
+@app.delete('/companies/{company_id}', response_model=schemas.CompanyRead)
 def delete_company(company_id: int, db: Session = Depends(get_db)):
     db_company = crud.delete_company(db=db, company_id=company_id)
     if db_company is None:

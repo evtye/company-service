@@ -3,7 +3,7 @@ from pydantic_core.core_schema import ValidationInfo
 
 
 class CompanyBase(BaseModel):
-    name: str = Field(..., min_length=2, max_length=101)
+    name: str = Field(..., min_length=2, max_length=100)
     ownership_type: int
     inn: str
 
